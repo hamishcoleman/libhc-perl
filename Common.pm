@@ -37,7 +37,7 @@ default settings
 
 sub show_options {
     my @option_list = grep {$_} @_;
-    foreach(@option_list) {
+    foreach(sort @option_list) {
         # TODO - separate short, long and aliases
         $_="--".$_;
     }
