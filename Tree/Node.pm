@@ -43,7 +43,7 @@ sub children {
 # Returns the list of all known children that match the search
 sub search {
     my $self = shift;
-    my $filter = shift;
+    my $filter = shift||'';
     my @result = grep {($_->name()||'') =~ m/$filter/} $self->children();
 
     if (scalar(@result) > 1) {
@@ -154,7 +154,7 @@ sub to_string_treenode {
     push @s,$self->to_string_path();
     my $depth = scalar($self->path());
     for my $node ($self->children()) {
-        push @s,' 'x$depth,$node->name(),"\n";
+        push @s,' 'x$depth,$node->to_string(),"\n";
     }
     if (wantarray) {
         return @s;
