@@ -153,7 +153,8 @@ sub to_string_treenode {
 
     push @s,$self->to_string_path();
     my $depth = scalar($self->path());
-    for my $node ($self->children()) {
+    my @sorted = sort {$a->name cmp $b->name} $self->children();
+    for my $node (@sorted) {
         push @s,' 'x$depth,$node->to_string(),"\n";
     }
     if (wantarray) {
