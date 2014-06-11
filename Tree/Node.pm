@@ -44,9 +44,9 @@ sub children {
 sub search {
     my $self = shift;
     my $filter = shift||'';
-    my @result = grep {($_->name()||'') =~ m/$filter/} $self->children();
+    my @results = grep {($_->name()||'') =~ m/$filter/} $self->children();
 
-    if (scalar(@result) > 1) {
+    if (scalar(@results) > 1) {
         if (scalar(@_) > 0) {
             # if we got more than one result, we fail a multi-stage search
             return undef;
@@ -54,7 +54,7 @@ sub search {
 
         if (wantarray) {
             # return all the results as an array
-            return @result;
+            return @results;
         }
 
         # otherwise, it is an error to try to return multiple results if
@@ -64,14 +64,19 @@ sub search {
     }
 
     # We get here if there is only one result
+    my $result = $results[0];
 
     # We either want a multi-stage search
     if (scalar(@_) > 0) {
-        return $result[0]->search(@_);
+        if (!defined($result)) {
+            # no match in the sub-search, so we fail the multi-stage search
+            return undef;
+        }
+        return $result->search(@_);
     }
 
-    # or we can just return the result
-    return $result[0];
+    # or if it is not a mult-stage search, we can just return the result
+    return $result;
 }
 
 # Render this node
