@@ -43,7 +43,13 @@ sub children {
 # Returns the list of all known children that match the search
 sub search {
     my $self = shift;
-    my $filter = shift||'';
+    my $filter = shift;
+
+    if (!defined($filter)) {
+        # no search term given, just return ourselves
+        return $self;
+    }
+
     my @results = grep {($_->name()||'') =~ m/$filter/} $self->children();
 
     if (scalar(@results) > 1) {
