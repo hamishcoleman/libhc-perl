@@ -44,7 +44,7 @@ sub show_options {
     print join(", ",@option_list);
 }
 
-=item B<do_options>                                                           
+=item B<do_options>
 
   do_options($optionhash,$option_list);
 
@@ -69,6 +69,49 @@ sub do_options {
     }
 }
 
+=item B<hexdump>
+
+  hexdump($buffer);
+
+returns a string with the buffer converted to hex
+
+=cut
+
+sub hexdump(\$) {
+    my ($buf) = @_;
+    my $r;
+
+    if (!defined $$buf) {
+        return undef;
+    }
+
+    my $offset=0;
+    while ($offset<length $$buf) {
+        if (defined($r)) {
+            # we have more than one line, so end the previous one first
+            $r.="\n";
+        }
+        my @buf16= split //, substr($$buf,$offset,16);
+        $r.=sprintf('%03x: ',$offset);
+        for my $i (0..15) {
+            if (defined $buf16[$i]) {
+                $r.=sprintf('%02x ',ord($buf16[$i]));
+            } else {
+                $r.=sprintf('   ');
+            }
+        }
+        $r.= "| ";
+        for my $i (@buf16) {
+            if (defined $i && ord($i)>0x20 && ord($i)<0x7f) {
+                $r.=sprintf('%s',$i);
+            } else {
+                $r.=sprintf(' ');
+            }
+        }
+        $offset+=16;
+    }
+    return $r;
+}
 
 =back
 
