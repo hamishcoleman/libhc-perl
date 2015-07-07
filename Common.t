@@ -29,9 +29,7 @@ HC::Common::do_options($option,@option_list);
 ok($option->{quiet});
 ok(! exists $option->{verbose});
 
-#@ARGV = qw( --help );
-#HC::Common::do_options($option,@option_list);
-## TODO - how to test the output?
+is(HC::Common::options2string(@option_list),'--opt1|o=s, --opt2|p=i, --quiet, --verbose+');
 
 is(HC::Common::hexdump(undef),undef);
 my $buf="a\x0fcde\x80";

@@ -35,13 +35,15 @@ default settings
 
 =cut
 
-sub show_options {
+sub options2string {
     my @option_list = grep {$_} @_;
     foreach(sort @option_list) {
-        # TODO - separate short, long and aliases
+        # TODO
+        # - separate short, long and aliases
+        # - remove the type tags?
         $_="--".$_;
     }
-    print join(", ",@option_list);
+    return join(", ",@option_list);
 }
 
 =item B<do_options>
@@ -59,7 +61,7 @@ sub do_options {
     if ($option->{help} && @option_list) {
         print("List of options:\n");
         print("\t");
-        show_options(@_);
+        print options2string(@_);
         print("\n");
     }
     pod2usage(-exitstatus => 0, -verbose => 2) if $option->{man};
