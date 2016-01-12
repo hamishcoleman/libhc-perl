@@ -110,5 +110,18 @@ sub put {
     return $self;
 }
 
+# remove a key if it exists
+sub del {
+    my $self = shift;
+    my $key = shift;
+
+    return undef if (!$self->_check_key_sanity($key));
+    return undef if (!$self->_check_cachedir());
+
+    my $filename = $self->_cachedir . '/' . $key;
+    unlink($filename);
+    return $self;
+}
+
 1;
 
