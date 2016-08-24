@@ -46,7 +46,9 @@ sub _readfile {
 
         my ($key,$username,$password) = split(/\s+/);
 
-        if (!defined($username) && !defined($password)) {
+        if (!defined($username)) {
+            # If we have no username, then we must have no password
+
             # use the previous ones
             $username=$prev_username;
             $password=$prev_password;
