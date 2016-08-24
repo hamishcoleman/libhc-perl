@@ -10,6 +10,10 @@ BEGIN {
 my $cache;
 $cache = new_ok('HC::Cache::Dir');
 
+is($cache->_check_cachedir(),undef,'cachedir is null');
+isa_ok($cache->set_cachedir('/dev/null/impossible'),'HC::Cache::Dir');
+is($cache->_check_cachedir(),undef,'could not mkdir cachedir');
+
 is($cache->get('invalid/key1'),undef);
 is($cache->get('testkey1'),undef);
 

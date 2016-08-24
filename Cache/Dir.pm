@@ -57,7 +57,8 @@ sub _check_cachedir {
 
     if (! -e $cachedir) {
         # Doesnt exist, try to make it, or just fail
-        return undef if (! make_path($cachedir));
+        make_path($cachedir, {error => \my $err});
+        return undef if (@$err); # dont care what errors, just exit
     }
 
     return undef if (! -d $cachedir); # if it exists, it must be a dir
