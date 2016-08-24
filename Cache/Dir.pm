@@ -67,14 +67,23 @@ sub _check_cachedir {
     return $self;
 }
 
+# Do all standard environmental checks
+sub _check_env {
+    my $self = shift;
+    my $key = shift;
+
+    return undef if (!$self->_check_key_sanity($key));
+    return undef if (!$self->_check_cachedir());
+    return $self;
+}
+
 # Get data from the cache, if it is available and still valid
 #
 sub get {
     my $self = shift;
     my $key = shift;
 
-    return undef if (!$self->_check_key_sanity($key));
-    return undef if (!$self->_check_cachedir());
+    return undef if (!$self->_check_env($key));
 
     my $filename = $self->_cachedir . '/' . $key;
 
@@ -100,8 +109,7 @@ sub put {
         return undef;
     }
 
-    return undef if (!$self->_check_key_sanity($key));
-    return undef if (!$self->_check_cachedir());
+    return undef if (!$self->_check_env($key));
 
     my $filename = $self->_cachedir . '/' . $key;
 
@@ -115,8 +123,7 @@ sub del {
     my $self = shift;
     my $key = shift;
 
-    return undef if (!$self->_check_key_sanity($key));
-    return undef if (!$self->_check_cachedir());
+    return undef if (!$self->_check_env($key));
 
     my $filename = $self->_cachedir . '/' . $key;
     unlink($filename);
