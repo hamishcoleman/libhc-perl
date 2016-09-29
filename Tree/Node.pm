@@ -13,6 +13,23 @@ sub new {
     my $class = shift;
     my $self = {};
     bless $self, $class;
+    $self->_handle_args(@_);
+    return $self;
+}
+
+sub _handle_args {
+    my $self = shift;
+    my %args = (
+        @_,
+    );
+    while (my ($key,$val) = each(%args)) {
+        if(!$self->can($key)) {
+            # dont ask me to do something I cannot do!
+            return undef;
+        }
+        $self->$key($val);
+    }
+
     return $self;
 }
 
