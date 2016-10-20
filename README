@@ -4,3 +4,15 @@ re-creating in new projects.
 This repository forms a simple submodule that can be included in other
 projects.
 
+To use this, ensure that the normal steps have been taken to make a "lib"
+dir:
+    use File::Spec;
+
+    # allow the libs to be in the bin dir
+    use FindBin;
+    use lib File::Spec->catdir($FindBin::RealBin,"lib");
+
+Then add this repo as a submodule:
+
+    git submodule add $REPOURL lib/HC
+
