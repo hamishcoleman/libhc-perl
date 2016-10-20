@@ -1,0 +1,6 @@
+A collection of small helper routines that I found myself continuously
+re-creating in new projects.
+
+This repository forms a simple submodule that can be included in other
+projects.
+
