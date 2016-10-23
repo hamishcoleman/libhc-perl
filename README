@@ -5,7 +5,7 @@ This repository forms a simple submodule that can be included in other
 projects.
 
 To use this, ensure that the normal steps have been taken to make a "lib"
-dir:
+dir usable - at the beginning of the perl code:
     use File::Spec;
 
     # allow the libs to be in the bin dir
