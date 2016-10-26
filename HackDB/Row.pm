@@ -1,4 +1,4 @@
-package HackDB::Row;
+package HC::HackDB::Row;
 use warnings;
 use strict;
 #
@@ -117,7 +117,7 @@ sub extract {
     }
 
     my @rowdata = $self->field(@fields);
-    my $row = HackDB::Row->new($name2nr,\@rowdata);
+    my $row = HC::HackDB::Row->new($name2nr,\@rowdata);
     return $row;
 }
 

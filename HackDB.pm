@@ -1,4 +1,4 @@
-package HackDB;
+package HC::HackDB;
 use warnings;
 use strict;
 #
@@ -8,7 +8,7 @@ use strict;
 
 use Text::CSV;
 
-use HackDB::Row;
+use HC::HackDB::Row;
 
 sub new {
     my $class = shift;
@@ -57,7 +57,9 @@ sub _add_row {
 
 sub row {
     my ($self,$rownr) = @_;
-    return HackDB::Row->new($self->_column_name2nr(),$self->_rowdata($rownr));
+    return HC::HackDB::Row->new(
+        $self->_column_name2nr(),$self->_rowdata($rownr)
+    );
 }
 
 sub _row_count {
@@ -100,7 +102,7 @@ sub query {
     my ($self) = shift;
     my %args = ( @_ );
 
-    my $results = HackDB->new();
+    my $results = HC::HackDB->new();
     $self->foreach( sub {
         if ($_->match(%args)) {
             $results->_add_row($_);
@@ -113,7 +115,7 @@ sub extract {
     my ($self) = shift;
     my @fields = @_;
 
-    my $results = HackDB->new();
+    my $results = HC::HackDB->new();
     $self->foreach( sub {
         $results->_add_row($_->extract(@fields));
     });
