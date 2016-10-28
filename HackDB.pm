@@ -16,6 +16,7 @@ sub new {
     bless $self, $class;
     #$self->_handle_args(@_);
 
+    $self->{column_name2nr} = {};
     return $self;
 }
 
@@ -37,7 +38,7 @@ sub _set_column_name2nr_raw {
 sub set_column_names {
     my ($self) = shift;
     # cannot set the names twice
-    return undef if (defined($self->_column_name2nr_raw()));
+    return undef if (scalar(keys(%{$self->_column_name2nr_raw()})));
     return $self->_set_column_name2nr_raw(_name2nr_helper(@_));
 }
 
@@ -59,7 +60,8 @@ sub _column_name2nr_raw {
 
 sub add_row {
     my ($self,$row) = @_;
-    if (!defined($self->{column_name2nr})) {
+    # if we have no columns, adopt the ones from the row
+    if (!scalar(keys(%{$self->_column_name2nr_raw()}))) {
         $self->_set_column_name2nr_raw($row->_column_name2nr_raw());
     }
 
