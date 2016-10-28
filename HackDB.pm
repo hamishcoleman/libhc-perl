@@ -62,6 +62,12 @@ sub row {
     );
 }
 
+sub empty_row {
+    my $self = shift;
+    my $data = [];
+    return HC::HackDB::Row->new( $self->_column_name2nr_raw(),$data );
+}
+
 sub _row_count {
     my ($self) = @_;
     if (defined($self->{data})) {
