@@ -39,7 +39,7 @@ sub _rowdata {
     return $self->{data}[$rownr];
 }
 
-sub _column_name2nr {
+sub _column_name2nr_raw {
     my ($self) = @_;
     return $self->{column_name2nr};
 }
@@ -58,7 +58,7 @@ sub _add_row {
 sub row {
     my ($self,$rownr) = @_;
     return HC::HackDB::Row->new(
-        $self->_column_name2nr(),$self->_rowdata($rownr)
+        $self->_column_name2nr_raw(),$self->_rowdata($rownr)
     );
 }
 
