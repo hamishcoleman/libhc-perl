@@ -59,5 +59,25 @@ EOF
 
 is($result->to_string_pretty(),$expected);
 
+isa_ok($object->row(0)->_add_field('id',3),$classname.'::Row');
+is($object->row(0)->field('id'),3);
+isa_ok($object->row(0)->_add_field('colour','black'),$classname.'::Row');
+is($object->row(0)->field('colour'),'black');
+
+my $empty_row = $object->empty_row();
+isa_ok($empty_row,$classname.'::Row');
+isa_ok($empty_row->_add_field('id',4),$classname.'::Row');
+isa_ok($object->_add_row($empty_row),$classname);
+
+$expected = <<EOF;
+id name        comment colour 
+ 3  dog a friendly one  black 
+ 2  cat somewhat aloof        
+ 4                            
+EOF
+is($object->to_string_pretty(),$expected);
+
+
+
 # TODO:
 # load_csv - add an external file
