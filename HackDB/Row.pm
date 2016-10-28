@@ -71,6 +71,16 @@ sub _add_field {
     return $self;
 }
 
+sub set_from_hash {
+    my $self = shift;
+    my $hash = shift;
+
+    while (my ($key,$val) = each(%{$hash})) {
+        $self->_add_field($key,$val);
+    }
+    return $self;
+}
+
 sub field {
     my ($self) = shift;
     my @result;

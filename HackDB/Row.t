@@ -32,6 +32,18 @@ is($object->to_string(),'300,1970-01-10,Pay rent,incoming');
 
 is($object->extract('direction','value')->to_string(),'incoming,300');
 
+my $hash = {
+    value    => 100,
+    date     => '1972-06-06',
+    comment  => 'Clean gutters',
+    category => 'house',
+};
+isa_ok($object->set_from_hash($hash),$classname);
+@column_names = $object->column_names();
+is_deeply(\@column_names, ['value','date','comment','direction','category']);
+is($object->to_string(),'100,1972-06-06,Clean gutters,incoming,house');
+
+
 # TODO:
 # _set_field
 # _add_field
