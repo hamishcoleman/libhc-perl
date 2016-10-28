@@ -178,7 +178,7 @@ sub to_string_pretty {
     $self->foreach( sub {
         my $fields = $_->_rowdata();    # FIXME - should have a public accessor
         for my $col (0..scalar(@column_names)-1) {
-            push @s, sprintf("%*s ",$col_widths[$col],$fields->[$col]);
+            push @s, sprintf("%*s ",$col_widths[$col],$fields->[$col]||'');
         }
         push @s, "\n";
     });
