@@ -122,24 +122,26 @@ sub extract {
     return $results;
 }
 
-sub print_columns {
+sub to_string_columns {
     my ($self) = shift;
     my $row = $self->row(0);
     return undef if (!defined($row));
 
     my @columns = $row->column_names();
-    print(join(',',@columns));
+    return join(',',@columns);
 }
 
-sub print {
+sub to_string {
     my ($self) = shift;
-    $self->print_columns();
-    print("\n");
+    my @s;
+
+    push @s,$self->to_string_columns();
+    push @s,"\n";
     $self->foreach( sub {
-        $_->print();
-        print("\n");
+        push @s,$_->to_string();
+        push @s,"\n";
     });
-    return $self;
+    return join('',@s);
 }
 
 1;

@@ -48,7 +48,8 @@ is_deeply(\@new_cols, ['id','comment']);
 is($field1,2);
 is($field2,'somewhat aloof');
 
+is($result->to_string_columns(),'id,comment');
+is($result->to_string(),"id,comment\n1,a friendly one\n2,somewhat aloof\n");
+
 # TODO:
 # load_csv - add an external file
-# print_columns - convert interface into "to_string_columns"
-# print - convert interface into "to_string"

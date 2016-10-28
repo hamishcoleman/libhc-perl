@@ -121,9 +121,9 @@ sub extract {
     return $row;
 }
 
-sub print {
+sub to_string {
     my ($self) = shift;
-    print(join(',',@{$self->_rowdata()}));
+    return join(',',@{$self->_rowdata()});
 }
 
 1;

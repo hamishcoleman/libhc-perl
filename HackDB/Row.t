@@ -28,10 +28,11 @@ is($object->_add_field('direction','incoming'),$object);
 @column_names = $object->column_names();
 is_deeply(\@column_names, ['value','date','comment','direction']);
 
+is($object->to_string(),'300,1970-01-10,Pay rent,incoming');
+
 # TODO:
 # _set_field
 # _add_field
 # match - currently covered by HC::HackDB
 # extract - currently covered by HC::HackDB
-# print - convert interface to use "to_string"
 
