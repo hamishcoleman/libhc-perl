@@ -46,7 +46,7 @@ sub _set_field {
     my $fieldnr = $self->_column_name2nr($field);
 
     # Dont update a non-existant field
-    return undef if (!$fieldnr);
+    return undef if (!defined($fieldnr));
 
     @{$self->_rowdata()}[$fieldnr] = $val;
     return $self;
