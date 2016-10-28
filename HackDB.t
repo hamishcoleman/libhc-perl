@@ -51,5 +51,13 @@ is($field2,'somewhat aloof');
 is($result->to_string_columns(),'id,comment');
 is($result->to_string(),"id,comment\n1,a friendly one\n2,somewhat aloof\n");
 
+my $expected = <<EOF;
+id        comment 
+ 1 a friendly one 
+ 2 somewhat aloof 
+EOF
+
+is($result->to_string_pretty(),$expected);
+
 # TODO:
 # load_csv - add an external file

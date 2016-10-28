@@ -122,12 +122,17 @@ sub extract {
     return $results;
 }
 
-sub to_string_columns {
-    my ($self) = shift;
+sub column_names {
+    my $self = shift;
     my $row = $self->row(0);
     return undef if (!defined($row));
+    return $row->column_names();
+}
 
-    my @columns = $row->column_names();
+sub to_string_columns {
+    my ($self) = shift;
+    my @columns = $self->column_names();
+    return undef if (!@columns);
     return join(',',@columns);
 }
 
@@ -140,6 +145,42 @@ sub to_string {
     $self->foreach( sub {
         push @s,$_->to_string();
         push @s,"\n";
+    });
+    return join('',@s);
+}
+
+sub to_string_pretty {
+    my $self = shift;
+    my $grid;
+
+    my @column_names = $self->column_names();
+
+    my @col_widths;
+    for my $col (0..scalar(@column_names)-1) {
+        $col_widths[$col] = length($column_names[$col]);
+    }
+
+    $self->foreach( sub {
+        my $fields = $_->_rowdata();    # FIXME - should have a public accessor
+        for my $col (0..scalar(@{$fields})-1) {
+            my $this_len = length($fields->[$col]) ||0;
+            if ($this_len > $col_widths[$col]) {
+                $col_widths[$col] = $this_len;
+            }
+        }
+    });
+
+    my @s;
+    for my $col (0..scalar(@column_names)-1) {
+        push @s, sprintf("%*s ",$col_widths[$col],$column_names[$col]);
+    }
+    push @s, "\n";
+    $self->foreach( sub {
+        my $fields = $_->_rowdata();    # FIXME - should have a public accessor
+        for my $col (0..scalar(@column_names)-1) {
+            push @s, sprintf("%*s ",$col_widths[$col],$fields->[$col]);
+        }
+        push @s, "\n";
     });
     return join('',@s);
 }
