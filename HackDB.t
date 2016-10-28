@@ -14,6 +14,7 @@ $object = new_ok($classname);
 
 my @column_names = qw(id name comment);
 is($object->set_column_names(@column_names),$object);
+is($object->set_column_names(qw(aaa bbb)),undef);
 
 my $row0 = [1,"dog","a friendly one"];
 my $row1 = [2,"cat","somewhat aloof"];
@@ -67,7 +68,7 @@ is($object->row(0)->field('colour'),'black');
 my $empty_row = $object->empty_row();
 isa_ok($empty_row,$classname.'::Row');
 isa_ok($empty_row->_add_field('id',4),$classname.'::Row');
-isa_ok($object->_add_row($empty_row),$classname);
+isa_ok($object->add_row($empty_row),$classname);
 
 $expected = <<EOF;
 id name        comment colour 

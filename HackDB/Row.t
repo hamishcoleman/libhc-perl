@@ -30,6 +30,8 @@ is_deeply(\@column_names, ['value','date','comment','direction']);
 
 is($object->to_string(),'300,1970-01-10,Pay rent,incoming');
 
+is($object->extract('direction','value')->to_string(),'incoming,300');
+
 # TODO:
 # _set_field
 # _add_field

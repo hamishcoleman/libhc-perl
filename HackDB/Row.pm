@@ -35,6 +35,11 @@ sub _set_rowdata {
 
 sub _rowdata { return shift->{rowdata}; }
 
+sub _column_name2nr_raw {
+    my $self = shift;
+    return $self->{column_name2nr};
+}
+
 sub _column_name2nr {
     my ($self,$column) = @_;
     return $self->{column_name2nr}{$column};
@@ -105,6 +110,16 @@ sub column_names {
     return @columns;
 }
 
+sub extract_into {
+    my $self = shift;
+    my $empty_row = shift;
+
+    my $rowdata;
+    @{$rowdata} = $self->field(@_);
+    $empty_row->_set_rowdata($rowdata);
+    return $empty_row;
+}
+
 sub extract {
     my ($self) = shift;
     my @fields = @_;
@@ -116,9 +131,9 @@ sub extract {
         $name2nr->{$column} = $nr++;
     }
 
-    my @rowdata = $self->field(@fields);
-    my $row = HC::HackDB::Row->new($name2nr,\@rowdata);
-    return $row;
+    my $data = [];
+    my $row = HC::HackDB::Row->new($name2nr,$data);
+    return $self->extract_into($row,@fields);
 }
 
 sub to_string {

@@ -19,13 +19,26 @@ sub new {
     return $self;
 }
 
+sub _name2nr_helper {
+    my $nr = 0;
+    my $hash;
+    for my $column (@_) {
+        $hash->{$column} = $nr++;
+    }
+    return $hash;
+}
+
+sub _set_column_name2nr_raw {
+    my $self = shift;
+    $self->{column_name2nr} = shift;
+    return $self;
+}
+
 sub set_column_names {
     my ($self) = shift;
-    my $nr = 0;
-    for my $column (@_) {
-        $self->{column_name2nr}{$column} = $nr++;
-    }
-    return $self;
+    # cannot set the names twice
+    return undef if (defined($self->_column_name2nr_raw()));
+    return $self->_set_column_name2nr_raw(_name2nr_helper(@_));
 }
 
 sub set_rowdata {
@@ -44,13 +57,18 @@ sub _column_name2nr_raw {
     return $self->{column_name2nr};
 }
 
-sub _add_row {
+sub add_row {
     my ($self,$row) = @_;
     if (!defined($self->{column_name2nr})) {
-        $self->set_column_names($row->column_names());
+        $self->_set_column_name2nr_raw($row->_column_name2nr_raw());
     }
 
-    # TODO - confirm that the columns from this row match our existing ones
+    if ($row->_column_name2nr_raw() != $self->_column_name2nr_raw()) {
+        # columns from this row are not a ref to the same columns as self
+        return undef;
+        # TODO - could check all the column names here...
+    }
+
     $self->set_rowdata($self->_row_count(),$row->_rowdata());
     return $self;
 }
@@ -111,7 +129,7 @@ sub query {
     my $results = HC::HackDB->new();
     $self->foreach( sub {
         if ($_->match(%args)) {
-            $results->_add_row($_);
+            $results->add_row($_);
         }
     });
     return $results;
@@ -122,8 +140,11 @@ sub extract {
     my @fields = @_;
 
     my $results = HC::HackDB->new();
+    $results->set_column_names(@fields);
+
     $self->foreach( sub {
-        $results->_add_row($_->extract(@fields));
+        my $row = $results->empty_row();
+        $results->add_row($_->extract_into($row,@fields));
     });
     return $results;
 }
