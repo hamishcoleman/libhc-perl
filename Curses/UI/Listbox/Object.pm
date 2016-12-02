@@ -15,7 +15,7 @@ sub new() {
     my $self = $class->SUPER::new( %userargs );
     return undef if (!defined($self));
 
-    $self->labels($self->RenderLabels());
+    $self->RenderLabels();
 
     $self->set_routine('option-select', \&view_object);
 
@@ -38,7 +38,8 @@ sub RenderLabels() {
             $labels->{$_} = ''. $_;
         }
     }
-    return $labels;
+    $self->labels($labels);
+    return 1;
 }
 
 sub view_object() {
