@@ -31,10 +31,12 @@ sub new() {
 # Take the current values and save them for later
 sub PushValues() {
     my $self = shift;
+    my $history_name = shift;
 
     push @{$self->{__stack}}, $self->get_active_id();
     push @{$self->{__stack}}, $self->{-yscrpos};
     push @{$self->{__stack}}, $self->values();
+    push @{$self->{__stack}}, $history_name;
 }
 
 # Replace the current values with the top of the stack
@@ -43,10 +45,32 @@ sub PopValues() {
     if (!scalar(@{$self->{__stack}})) {
         return undef;
     }
+
+    # if we have a "history_name" for this item, we can save the last seen
+    # position values for it
+    my $history_name = pop @{$self->{__stack}};
+    if (defined($history_name)) {
+        $self->{__last_pos}{$history_name}{-yscrpos} = $self->{-yscrpos};
+        $self->{__last_pos}{$history_name}{-ypos} = $self->{-ypos};
+    }
+
     $self->values(pop @{$self->{__stack}});
     $self->{-yscrpos} = pop @{$self->{__stack}};
     $self->{-ypos} = pop @{$self->{__stack}};
     $self->RenderLabels();
+    $self->schedule_draw(1);
+}
+
+# Given a "history_name", look for the last seen position values for it,
+# and use them
+sub UseLastSelection() {
+    my $self = shift;
+    my $history_name = shift;
+
+    return if (!defined($self->{__last_pos}{$history_name}));
+
+    $self->{-yscrpos} = $self->{__last_pos}{$history_name}{-yscrpos};
+    $self->{-ypos} = $self->{__last_pos}{$history_name}{-ypos};
     $self->schedule_draw(1);
 }
 
