@@ -16,6 +16,7 @@ sub new() {
     return undef if (!defined($self));
 
     $self->{__stack} = [];
+    $self->{__stack_pos} = [];
 
     $self->RenderLabels();
 
@@ -33,6 +34,7 @@ sub PushValues() {
     my $self = shift;
 
     push @{$self->{__stack}}, $self->values();
+    push @{$self->{__stack_pos}}, $self->get_active_id();
 }
 
 # Replace the current values with the top of the stack
@@ -42,6 +44,7 @@ sub PopValues() {
         return undef;
     }
     $self->values(pop @{$self->{__stack}});
+    $self->set_selection(pop @{$self->{__stack_pos}});
     $self->RenderLabels();
 }
 
