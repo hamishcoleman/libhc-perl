@@ -44,8 +44,10 @@ sub PopValues() {
         return undef;
     }
     $self->values(pop @{$self->{__stack}});
-    $self->set_selection(pop @{$self->{__stack_pos}});
+    my $ypos = pop @{$self->{__stack_pos}};
+    $self->{-ypos} = $ypos;
     $self->RenderLabels();
+    $self->schedule_draw(1);
 }
 
 # Given objects for the Values, go through each one and ensure we have a
