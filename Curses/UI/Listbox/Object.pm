@@ -15,6 +15,8 @@ sub new() {
     my $self = $class->SUPER::new( %userargs );
     return undef if (!defined($self));
 
+    $self->{__stack} = [];
+
     $self->RenderLabels();
 
     $self->set_routine('option-select', \&view_object);
@@ -26,6 +28,25 @@ sub new() {
     return $self;
 }
 
+# Take the current values and save them for later
+sub PushValues() {
+    my $self = shift;
+
+    push @{$self->{__stack}}, $self->values();
+}
+
+# Replace the current values with the top of the stack
+sub PopValues() {
+    my $self = shift;
+    if (!scalar(@{$self->{__stack}})) {
+        return undef;
+    }
+    $self->values(pop @{$self->{__stack}});
+    $self->RenderLabels();
+}
+
+# Given objects for the Values, go through each one and ensure we have a
+# label for it.  This can be repeated at any time the Values are updated
 sub RenderLabels() {
     my $self = shift;
 
