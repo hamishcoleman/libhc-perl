@@ -32,9 +32,9 @@ sub new() {
 sub PushValues() {
     my $self = shift;
 
-    push @{$self->{__stack}}, $self->values();
     push @{$self->{__stack}}, $self->get_active_id();
     push @{$self->{__stack}}, $self->{-yscrpos};
+    push @{$self->{__stack}}, $self->values();
 }
 
 # Replace the current values with the top of the stack
@@ -43,9 +43,9 @@ sub PopValues() {
     if (!scalar(@{$self->{__stack}})) {
         return undef;
     }
+    $self->values(pop @{$self->{__stack}});
     $self->{-yscrpos} = pop @{$self->{__stack}};
     $self->{-ypos} = pop @{$self->{__stack}};
-    $self->values(pop @{$self->{__stack}});
     $self->RenderLabels();
     $self->schedule_draw(1);
 }
