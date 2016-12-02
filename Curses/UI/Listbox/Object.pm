@@ -46,6 +46,7 @@ sub PopValues() {
     $self->values(pop @{$self->{__stack}});
     my $ypos = pop @{$self->{__stack_pos}};
     $self->{-ypos} = $ypos;
+    $self->{-yscrpos} = 0;
     $self->RenderLabels();
     $self->schedule_draw(1);
 }
