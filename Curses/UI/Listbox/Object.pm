@@ -12,12 +12,6 @@ sub new() {
     my $class = shift;
     my %userargs = @_;
 
-    return undef if (!defined($userargs{-rendervalue}));
-
-    if (!defined($userargs{-renderlabel})) {
-        $userargs{-renderlabel} = \&DefaultRenderLabel;
-    }
-
     my $self = $class->SUPER::new( %userargs );
     return undef if (!defined($self));
 
@@ -32,19 +26,17 @@ sub new() {
     return $self;
 }
 
-# By default, we simply stringify the object, which might result in a
-# pleasing label anyway ...
-sub DefaultRenderLabel($) {
-    my $value = shift;
-    return ''. $value;
-}
-
 sub RenderLabels() {
     my $self = shift;
 
     my $labels;
     foreach (@{$self->{-values}}) {
-        $labels->{$_} = &{$self->{-renderlabel}}($_);
+        if ($_->can('RenderLabel')) {
+            $labels->{$_} = $_->RenderLabel();
+        } else {
+            # otherwise, simply stringify the object
+            $labels->{$_} = ''. $_;
+        }
     }
     return $labels;
 }
@@ -63,7 +55,9 @@ sub view_object() {
     #for each @objects, rendervalue
 
     my $object = $listbox->get_active_value();
-    &{$listbox->{-rendervalue}}($listbox,$object);
+    if ($object->can('RenderValue')) {
+        $object->RenderValue($listbox);
+    }
 }
 
 # requery / refresh
