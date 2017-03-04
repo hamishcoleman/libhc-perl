@@ -35,7 +35,11 @@ ok(-e $cachedir.'/testkey4');
 isa_ok($cache->del('testkey4'),$classname);
 ok(!-e $cachedir.'testkey4');
 
-# cleanup
+# Create one more key, then delete all
+isa_ok($cache->del('testkey5'),$classname);
+$cache->del_all();
+
+# cleanup - should fail if del_all didnt delete all the cache files
 ok(rmdir($cachedir));
 
 done_testing();

@@ -131,5 +131,16 @@ sub del {
     return $self;
 }
 
+# Remove all keys in this dir
+sub del_all {
+    my $self = shift;
+
+    return undef if (!$self->_check_cachedir());
+
+    my $filename = $self->_cachedir . '/*';
+    unlink(glob $filename);
+    return $self;
+}
+
 1;
 
