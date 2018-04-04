@@ -78,6 +78,26 @@ id name        comment colour
 EOF
 is($object->to_string_pretty(),$expected);
 
+my $csvdata = <<EOF;
+id,name,comment,colour
+5,tiger,dangerous,orange
+6,elephant,towel,white
+EOF
+open my $fh, '<', \$csvdata;
+
+$object = new_ok($classname);
+$object->set_column_names(qw(id name comment colour));
+isa_ok($object->load_csv($fh), $classname);
+
+# I assume that if I use this class in anger again, it will grow a "load csv
+# with column names in first line" and this result will look less silly
+$expected = <<EOF;
+id     name   comment colour 
+id     name   comment colour 
+ 5    tiger dangerous orange 
+ 6 elephant     towel  white 
+EOF
+is($object->to_string_pretty(),$expected);
 
 
 # TODO:
