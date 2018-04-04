@@ -21,4 +21,8 @@ isa_ok($cache->put('testkey4',$testdata),$classname);
 
 is_deeply($cache->get('testkey4'),$testdata);
 
+$cache->set_maxage(1);
+$cache->{_cache}{'testkey4'}{mtime} = time()-10;
+is($cache->get('testkey4'), undef);
+
 done_testing();
