@@ -8,9 +8,12 @@ BEGIN {
 my $classname = 'HC::Tree::Node';
 my $object;
 
-$object = new_ok($classname);
+$object = $classname->new(not_actually_a_mathod => 'fred');
+is($object, undef);
 
-is($object->name('fred'),'fred');
+$object = $classname->new(name => 'fred');
+isa_ok($object, $classname);
+
 is($object->name(),'fred');
 
 is($object->parent(),undef);

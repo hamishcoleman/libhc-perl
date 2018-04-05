@@ -13,8 +13,7 @@ sub new {
     my $class = shift;
     my $self = {};
     bless $self, $class;
-    $self->_handle_args(@_);
-    return $self;
+    return $self->_handle_args(@_);
 }
 
 sub _handle_args {
