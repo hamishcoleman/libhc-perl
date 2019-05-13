@@ -12,6 +12,7 @@ use strict;
 # start with 0-9 for simplicity
 # dont use shell metachars: ";<>?[]"
 # available:  [0-9]=@[A-Z]^_[a-z]~
+# the Caret gets quoted by the shell, so dont use that
 
 require Exporter;
 our @ISA = qw(Exporter);
