@@ -151,6 +151,23 @@ sub extract {
     return $results;
 }
 
+sub order_by {
+    my $self = shift;
+    my $field = shift;
+    # TODO - multi-field sorting;
+
+    my $field_nr = $self->_column_name2nr_raw()->{$field};
+    if (!defined($field_nr)) {
+        return undef;
+    }
+
+    my $results = HC::HackDB->new();
+    $results->set_column_names($self->column_names());
+
+    @{$results->{data}} = sort {$a[$field_nr] cmp $b[$field_nr]} @{$self->{data}};
+    return $results;
+}
+
 sub column_names {
     my $self = shift;
     my $row = $self->row(0);
