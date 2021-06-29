@@ -18,6 +18,7 @@ use strict;
 #
 
 use IO::File;
+use File::Glob;
 
 sub new {
     my $class = shift;
@@ -25,9 +26,33 @@ sub new {
     bless $self, $class;
 
     my $filename = shift;
-    return undef if (!defined($filename));
+    return $self->_findfile($filename);
+}
 
-    return $self->_readfile($filename);
+# Consider a number of possible locations for the credfile and try loading
+# each one
+sub _findfile {
+    my $self = shift;
+    my $filename = shift;
+
+    # first, try any explicit file from the commandline
+    if (defined($filename) && -e $filename) {
+        return $self->_readfile($filename);
+    }
+
+    # next, try environment variable
+    if (defined($ENV{'CREDFILE'}) && -e $ENV{'CREDFILE'}) {
+        return $self->_readfile($ENV{'CREDFILE'});
+    }
+
+    # finally, try a generica hardcoded location
+    my $dotfile = File::Glob::bsd_glob('~/.credfile');
+    if ( -e $dotfile ) {
+        return $self->_readfile($dotfile);
+    }
+
+    # if nothing found, we simply end up with an empty dictionary
+    return $self;
 }
 
 sub _readfile {
