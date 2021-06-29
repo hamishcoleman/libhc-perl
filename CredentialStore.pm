@@ -26,7 +26,9 @@ sub new {
     bless $self, $class;
 
     my $filename = shift;
-    return $self->_findfile($filename);
+    $self->_findfile($filename);
+
+    return $self;
 }
 
 # Consider a number of possible locations for the credfile and try loading
