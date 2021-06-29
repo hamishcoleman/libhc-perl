@@ -164,7 +164,7 @@ sub order_by {
     my $results = HC::HackDB->new();
     $results->set_column_names($self->column_names());
 
-    @{$results->{data}} = sort {$a[$field_nr] cmp $b[$field_nr]} @{$self->{data}};
+    @{$results->{data}} = sort {$a->[$field_nr] cmp $b->[$field_nr]} @{$self->{data}};
     return $results;
 }
 
