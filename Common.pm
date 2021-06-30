@@ -85,5 +85,21 @@ sub subcommand_help {
     return undef;
 }
 
+sub subcommand {
+    my $cmds = shift;
+    my $cmd = shift;
+    my $context = shift;
+
+    if (!defined($cmd)) {
+        die("Need sub-command");
+    }
+
+    if (!defined($cmds->{$cmd})) {
+        die("No such sub-command '$cmd'");
+    }
+
+    return $cmds->{$cmd}{'cmd'}($context, @ARGV);
+}
+
 1;
 
