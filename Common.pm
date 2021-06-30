@@ -71,5 +71,19 @@ sub do_options {
     }
 }
 
+sub subcommand_help {
+    my $option = shift;
+    my $cmds = shift;
+
+    if (defined($option->{help})) {
+        print("Sub commands:\n\n");
+        for my $cmd (sort(keys(%{$cmds}))) {
+            printf("%-18s %s\n",$cmd,$cmds->{$cmd}{help});
+        }
+        return 1;
+    }
+    return undef;
+}
+
 1;
 
