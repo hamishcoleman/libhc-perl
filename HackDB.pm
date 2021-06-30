@@ -75,6 +75,28 @@ sub add_row {
     return $self;
 }
 
+# Add a single row from a hash
+sub add_row_hash {
+    my $self = shift;
+    my $hash = shift;
+    my $row = $self->empty_row();
+    $row->set_from_hash($hash);
+    $self->add_row($row);
+    return $self;
+}
+
+# Add multiple rows from a hash of hashes
+# assume the first level of hashes is simply a unique array and ignore the key
+sub add_rows_hash {
+    my $self = shift;
+    my $hash = shift;
+
+    for my $data_row (values(%{$hash})) {
+        $self->add_row_hash($data_row);
+    }
+    return $self;
+}
+
 sub row {
     my ($self,$rownr) = @_;
     return HC::HackDB::Row->new(
