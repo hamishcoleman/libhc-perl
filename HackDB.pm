@@ -97,6 +97,17 @@ sub add_rows_hash {
     return $self;
 }
 
+# Add multiple rows from an array of hashes
+sub add_rows_array {
+    my $self = shift;
+    my $array = shift;
+
+    for my $data_row (@{$array}) {
+        $self->add_row_hash($data_row);
+    }
+    return $self;
+}
+
 sub row {
     my ($self,$rownr) = @_;
     return HC::HackDB::Row->new(
