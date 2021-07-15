@@ -250,15 +250,18 @@ sub to_string_pretty {
         }
     });
 
+    # Every column except for the first needs to leave room for a gap
+    $col_widths[0]--;
+
     my @s;
     for my $col (0..scalar(@column_names)-1) {
-        push @s, sprintf("%*s ",$col_widths[$col],$column_names[$col]);
+        push @s, sprintf("%*s",$col_widths[$col]+1,$column_names[$col]);
     }
     push @s, "\n";
     $self->foreach( sub {
         my $fields = $_->_rowdata();    # FIXME - should have a public accessor
         for my $col (0..scalar(@column_names)-1) {
-            push @s, sprintf("%*s ",$col_widths[$col],$fields->[$col]||'');
+            push @s, sprintf("%*s",$col_widths[$col]+1,$fields->[$col]||'');
         }
         push @s, "\n";
     });
