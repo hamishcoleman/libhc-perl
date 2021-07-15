@@ -242,6 +242,7 @@ sub to_string_pretty {
     $self->foreach( sub {
         my $fields = $_->_rowdata();    # FIXME - should have a public accessor
         for my $col (0..scalar(@{$fields})-1) {
+            # FIXME - length here might need to know about utf8
             my $this_len = length($fields->[$col]) ||0;
             if ($this_len > $col_widths[$col]) {
                 $col_widths[$col] = $this_len;
