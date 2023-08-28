@@ -42,6 +42,22 @@ sub set_column_names {
     return $self->_set_column_name2nr_raw(_name2nr_helper(@_));
 }
 
+# Add a new field heading if needed
+sub add_column_name {
+    my $self = shift;
+
+    for my $field (@_) {
+        if (defined($self->{column_name2nr}{$field})) {
+            # Dont add an existing field
+            next;
+        }
+
+        my $nr = scalar(keys(%{$self->{column_name2nr}}));
+        $self->{column_name2nr}{$field} = $nr;
+    }
+    return $self;
+}
+
 sub set_rowdata {
     my ($self,$rownr,$data) = @_;
     @{$self->{data}}[$rownr] = $data;
